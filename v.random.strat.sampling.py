@@ -41,6 +41,12 @@
 #% answer: 100
 #%end
 
+#%option G_OPT_DB_COLUMN
+#% key: intcolumn
+#% required: no
+#% description: Name of column to create new integer class information
+#%end
+
 from grass.script import core as grass
 import os
 
@@ -58,6 +64,8 @@ def main():
     output = options['output']
     column = options['column']
     npoints = options['npoints']
+    intcolumn = options['intcolumn']
+
 
     # sampling
     grass.message("Sampling for each class separately...")
@@ -78,6 +86,17 @@ def main():
     grass.message("Combining separately sampled vector data...")
     grass.run_command(
         'v.patch', flags='e', input=','.join(class_outputs), output=output, quiet=True)
+
+    # create new column for integer values
+    if intcolumn:
+        grass.run_command(
+            'v.db.addcolumn', map=output, columns='%s INT' % intcolumn)
+        classcolumnname = '%s_%s' % (input, column)
+        for cl, num in zip(classes, range(len(classes))):
+            where_str = "%s = '%s'" % (classcolumnname, cl)
+            grass.run_command(
+                'v.db.update', map=output, column=intcolumn, value=num+1,
+                where=where_str, quiet=True)
 
     cleanup(class_outputs)
     grass.message("Sampling DONE <%s>" % output)
