@@ -66,7 +66,6 @@ def main():
     npoints = options['npoints']
     intcolumn = options['intcolumn']
 
-
     # sampling
     grass.message("Sampling for each class separately...")
     classes = grass.parse_command(
