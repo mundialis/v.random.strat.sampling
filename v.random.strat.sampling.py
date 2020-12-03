@@ -76,10 +76,13 @@ def main():
     for cl in classes:
         random_output = 'v_random_strat_sampling_%s_%s' % (cl.replace('-', '_'), str(os.getpid()))
         where_str = "%s = '%s'" % (column, cl)
-        grass.run_command(
-            'v.random', restrict=input, where=where_str, layer='1',
-            output=random_output, npoints=npoints)
-        class_outputs.append(random_output)
+        try:
+            grass.run_command(
+                'v.random', restrict=input, where=where_str, layer='1',
+                output=random_output, npoints=npoints)
+            class_outputs.append(random_output)
+        except:
+            grass.fatal("... an error occured!")
 
     # combine vector data
     grass.message("Combining separately sampled vector data...")
