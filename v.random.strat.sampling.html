@@ -1,6 +1,49 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.random.strat.sampling</em> allows to sample training data in a stratified way.
+<em>v.random.strat.sampling</em> allows to sample training data in a
+stratified way. The number of points is the amount of vector sample
+points to be created for each class.
+<p>
+The module can deal with both numeric and text columns.
+
+<h2>EXAMPLE</h2>
+
+In this example we sample points from the North Carolina (USA) urban area
+map (from North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region vector=urbanarea -p
+
+# show different attributes
+v.db.select urbanarea_sampled_strat column=UA_TYPE -c | sort -u
+UA
+UC
+
+# sample points randomly but stratified by the two classes from the vector areas
+v.random.strat.sampling input=urbanarea column=UA_TYPE output=urbanarea_sampled_strat npoints=50
+
+# new point map: show the attributes of the 50 UA  + 50 UC points
+v.db.select urbanarea_sampled_strat
+
+v.info -t urbanarea_sampled_strat
+nodes=0
+points=100
+lines=0
+boundaries=0
+centroids=0
+areas=0
+islands=0
+primitives=100
+map3d=0
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="v_random_strat_sampling.png">
+<img src="v_random_strat_sampling.png" width="600" height="225" alt="v.random.strat.sampling example" border="1">
+</a><br>
+<i>Figure: 50 sample points per class (stratified sampling on NC urban area map)</i>
+</div>
+
 
 <h2>SEE ALSO</h2>
 
