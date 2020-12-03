@@ -92,17 +92,15 @@ def main():
     input_columns_dict = grass.parse_command('v.info', map=input, flags='c')
     input_columns = [x.split('|')[1] for x in input_columns_dict]
     for tmp_col in tmp_columns:
-        if tmp_col == "cat":
+        if tmp_col == 'cat':
             continue
-        elif tmp_col.endswith("_cat"):
+        elif tmp_col == '%s_cat' % input:
             grass.run_command(
-                "v.db.dropcolumn", map=output, columns=tmp_col, quiet=True)
+                'v.db.dropcolumn', map=output, columns=tmp_col, quiet=True)
         else:
-            for incol in input_columns:
-                if tmp_col.endswith("_%s" % incol):
-                    grass.run_command(
-                        "v.db.renamecolumn", map=output, quiet=True,
-                        column="%s,%s" % (tmp_col, incol))
+            grass.run_command(
+                'v.db.renamecolumn', map=output, quiet=True,
+                column='%s,%s' % (tmp_col, tmp_col.replace('%s_' % input, '')))
 
     # create new column for integer values
     if intcolumn:
