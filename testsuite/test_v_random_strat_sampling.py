@@ -28,6 +28,7 @@ class Testdivide(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
+        cls.runModule('g.remove', flags='f', type='vector', name=cls.outtrain)
         cls.del_temp_region()
 
     def test_points(self):
@@ -36,8 +37,8 @@ class Testdivide(TestCase):
         self.assertModule('v.random.strat.sampling', input=self.invect, column='NAME',
                           output=self.outtrain, npoints=2)
         self.assertVectorExists(self.outtrain)
-        # there are 19 names in the table: 19 * unclear = 78
-        topology = dict(points=78)
+        # there are 19 names in the table: 19 * 2 = 38
+        topology = dict(points=38)
         self.assertVectorFitsTopoInfo(self.outtrain, topology)
 
 if __name__ == '__main__':
