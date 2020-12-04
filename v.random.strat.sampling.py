@@ -75,6 +75,7 @@ def main():
     class_outputs = []
     for cl in classes:
         random_output = 'v_random_strat_sampling_%s_%s' % (cl.replace('-', '_'), str(os.getpid()))
+        random_output = random_output.replace(' ', '_')
         where_str = "%s = '%s'" % (column, cl)
         try:
             grass.run_command(
